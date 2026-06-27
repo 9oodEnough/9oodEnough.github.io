@@ -4,53 +4,303 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>김현섭 — Web Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff; --accent2: #3fb950; }
-    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 3rem; max-width: 560px; width: 100%; }
-    .avatar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--border); margin-bottom: 1.5rem; }
-    .name { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.5px; }
-    .handle { color: var(--muted); font-size: 1rem; margin-top: 0.25rem; }
-    .bio { margin-top: 1.25rem; color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
-    .badge { display: inline-block; background: rgba(88,166,255,0.1); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); border-radius: 20px; padding: 0.2rem 0.75rem; font-size: 0.8rem; margin-top: 1rem; }
-    .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
-    .links { display: flex; flex-direction: column; gap: 0.75rem; }
-    .link-item { display: flex; align-items: center; gap: 0.75rem; color: var(--text); text-decoration: none; font-size: 0.9rem; padding: 0.6rem 0.75rem; border-radius: 8px; transition: background 0.15s; }
-    .link-item:hover { background: rgba(255,255,255,0.05); color: var(--accent); }
-    .link-icon { width: 18px; color: var(--muted); flex-shrink: 0; }
-    .status { display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; font-size: 0.82rem; color: var(--muted); }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    :root {
+      --bg: #080810;
+      --card: rgba(255,255,255,0.04);
+      --card-hover: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.16);
+      --text: #f0f0ff;
+      --muted: rgba(255,255,255,0.45);
+      --accent: #7c6ff7;
+      --accent2: #4fd1c5;
+      --gradient: linear-gradient(135deg, #7c6ff7 0%, #4fd1c5 100%);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -30%;
+      left: -20%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(ellipse, rgba(124,111,247,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -20%;
+      right: -10%;
+      width: 50%;
+      height: 50%;
+      background: radial-gradient(ellipse, rgba(79,209,197,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto;
+      gap: 12px;
+      max-width: 720px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      background: var(--card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Card spans */
+    .card-profile { grid-column: span 2; }
+    .card-avatar  { grid-column: span 1; display: flex; align-items: center; justify-content: center; }
+    .card-links   { grid-column: span 3; }
+    .card-status  { grid-column: span 1; }
+    .card-bio     { grid-column: span 2; }
+
+    /* Profile card */
+    .profile-tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .profile-tag::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .name {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.6));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .name-en {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      font-weight: 400;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 1rem;
+      background: rgba(124,111,247,0.15);
+      border: 1px solid rgba(124,111,247,0.3);
+      color: #a99ef7;
+      border-radius: 999px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* Avatar card */
+    .avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid rgba(124,111,247,0.4);
+      box-shadow: 0 0 30px rgba(124,111,247,0.2);
+    }
+
+    /* Bio card */
+    .bio-text {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 400;
+    }
+    .bio-text strong {
+      color: rgba(255,255,255,0.75);
+      font-weight: 500;
+    }
+
+    /* Status card */
+    .status-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .status-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #4fd1c5;
+      box-shadow: 0 0 8px #4fd1c5;
+      animation: pulse 2s infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    /* Links card */
+    .links {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .link-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 0.5rem;
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .link-item:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.14);
+    }
+    .link-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Gradient accent line on profile card */
+    .card-profile::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(124,111,247,0.6), rgba(79,209,197,0.4), transparent);
+    }
+
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .card-profile { grid-column: span 2; }
+      .card-avatar  { grid-column: span 2; }
+      .card-links   { grid-column: span 2; }
+      .card-status  { grid-column: span 1; }
+      .card-bio     { grid-column: span 1; }
+      .links { grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <img class="avatar" src="https://avatars.githubusercontent.com/u/19829606?v=4" alt="김현섭" />
-    <div class="name">김현섭</div>
-    <div class="handle">@9oodEnough · HyunSup Kim</div>
-    <div class="bio">Web Developer based in Pangyo, Korea.</div>
-    <span class="badge">Web Developer</span>
-    <hr class="divider" />
-    <div class="links">
-      <a class="link-item" href="https://github.com/9oodEnough" target="_blank" rel="noopener">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-        Github
-      </a>
-      <a class="link-item" href="https://www.linkedin.com/in/9oodenough/" target="_blank" rel="noopener">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        Linkedin
-      </a>
-      <a class="link-item" href="https://loveiskey.tistory.com" target="_blank" rel="noopener">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-        Blog
-      </a>
-      <a class="link-item" href="mailto:hskinn89@gmail.com">
-        <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        hskinn89@gmail.com
-      </a>
+  <div class="grid">
+
+    <!-- Profile -->
+    <div class="card card-profile">
+      <div class="profile-tag">Web Developer</div>
+      <div class="name">김현섭</div>
+      <div class="name-en">HyunSup Kim · @9oodEnough</div>
+      <span class="badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        Open to work
+      </span>
     </div>
-    <div class="status"><span class="dot"></span>판교 · Pangyo, Korea</div>
+
+    <!-- Avatar -->
+    <div class="card card-avatar">
+      <img class="avatar" src="https://avatars.githubusercontent.com/u/19829606?v=4" alt="김현섭" />
+    </div>
+
+    <!-- Bio -->
+    <div class="card card-bio">
+      <div class="bio-text">
+        <strong>판교</strong>에서 일하는 웹 개발자.<br />
+        Web Developer based in <strong>Pangyo, Korea</strong>.
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="card card-status">
+      <div class="status-label">Location</div>
+      <div class="status-value">
+        <span class="dot"></span>
+        판교, Korea
+      </div>
+    </div>
+
+    <!-- Links -->
+    <div class="card card-links">
+      <div class="links">
+        <a class="link-item" href="https://github.com/9oodEnough" target="_blank" rel="noopener">
+          <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          Github
+        </a>
+        <a class="link-item" href="https://www.linkedin.com/in/9oodenough/" target="_blank" rel="noopener">
+          <svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Linkedin
+        </a>
+        <a class="link-item" href="https://loveiskey.tistory.com" target="_blank" rel="noopener">
+          <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          Blog
+        </a>
+        <a class="link-item" href="mailto:hskinn89@gmail.com">
+          <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          hskinn89@gmail.com
+        </a>
+      </div>
+    </div>
+
   </div>
 </body>
 </html>
