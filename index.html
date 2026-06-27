@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>김현섭 — Web Developer</title>
+  <title>김현섭 — Full-Stack Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -20,7 +20,6 @@
       --muted: rgba(255,255,255,0.45);
       --accent: #7c6ff7;
       --accent2: #4fd1c5;
-      --gradient: linear-gradient(135deg, #7c6ff7 0%, #4fd1c5 100%);
     }
 
     body {
@@ -35,24 +34,19 @@
       overflow-x: hidden;
     }
 
-    /* Ambient background glow */
     body::before {
       content: '';
       position: fixed;
-      top: -30%;
-      left: -20%;
-      width: 60%;
-      height: 60%;
+      top: -30%; left: -20%;
+      width: 60%; height: 60%;
       background: radial-gradient(ellipse, rgba(124,111,247,0.12) 0%, transparent 70%);
       pointer-events: none;
     }
     body::after {
       content: '';
       position: fixed;
-      bottom: -20%;
-      right: -10%;
-      width: 50%;
-      height: 50%;
+      bottom: -20%; right: -10%;
+      width: 50%; height: 50%;
       background: radial-gradient(ellipse, rgba(79,209,197,0.08) 0%, transparent 70%);
       pointer-events: none;
     }
@@ -60,7 +54,6 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto;
       gap: 12px;
       max-width: 720px;
       width: 100%;
@@ -85,12 +78,12 @@
       transform: translateY(-2px);
     }
 
-    /* Card spans */
     .card-profile { grid-column: span 2; }
     .card-avatar  { grid-column: span 1; display: flex; align-items: center; justify-content: center; }
+    .card-job     { grid-column: span 3; }
     .card-links   { grid-column: span 3; }
     .card-status  { grid-column: span 1; }
-    .card-bio     { grid-column: span 2; }
+    .card-skills  { grid-column: span 2; }
 
     /* Profile card */
     .profile-tag {
@@ -107,8 +100,7 @@
     .profile-tag::before {
       content: '';
       display: inline-block;
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--accent);
     }
@@ -123,7 +115,7 @@
       background-clip: text;
     }
     .name-en {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--muted);
       margin-top: 0.4rem;
       font-weight: 400;
@@ -142,28 +134,78 @@
       font-weight: 500;
     }
 
-    /* Avatar card */
+    .card-profile::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(124,111,247,0.6), rgba(79,209,197,0.4), transparent);
+    }
+
+    /* Avatar */
     .avatar {
-      width: 90px;
-      height: 90px;
+      width: 90px; height: 90px;
       border-radius: 50%;
       border: 2px solid rgba(124,111,247,0.4);
       box-shadow: 0 0 30px rgba(124,111,247,0.2);
     }
 
-    /* Bio card */
-    .bio-text {
-      font-size: 0.9rem;
+    /* Job card */
+    .job-company {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       color: var(--muted);
-      line-height: 1.7;
-      font-weight: 400;
+      margin-bottom: 0.4rem;
     }
-    .bio-text strong {
-      color: rgba(255,255,255,0.75);
-      font-weight: 500;
+    .job-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .job-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+    .job-since {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--accent2);
+      background: rgba(79,209,197,0.08);
+      border: 1px solid rgba(79,209,197,0.2);
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
     }
 
-    /* Status card */
+    /* Skills */
+    .skills-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .skill-tag {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.25rem 0.65rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Status */
     .status-label {
       font-size: 0.7rem;
       text-transform: uppercase;
@@ -172,7 +214,7 @@
       margin-bottom: 0.5rem;
     }
     .status-value {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 500;
       display: flex;
       align-items: center;
@@ -191,7 +233,7 @@
       50% { opacity: 0.5; transform: scale(0.85); }
     }
 
-    /* Links card */
+    /* Links */
     .links {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -218,27 +260,13 @@
       background: rgba(255,255,255,0.07);
       border-color: rgba(255,255,255,0.14);
     }
-    .link-icon {
-      width: 20px;
-      height: 20px;
-    }
-
-    /* Gradient accent line on profile card */
-    .card-profile::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(124,111,247,0.6), rgba(79,209,197,0.4), transparent);
-    }
+    .link-icon { width: 20px; height: 20px; }
 
     @media (max-width: 560px) {
       .grid { grid-template-columns: repeat(2, 1fr); }
-      .card-profile { grid-column: span 2; }
-      .card-avatar  { grid-column: span 2; }
-      .card-links   { grid-column: span 2; }
-      .card-status  { grid-column: span 1; }
-      .card-bio     { grid-column: span 1; }
+      .card-profile, .card-avatar, .card-job, .card-links { grid-column: span 2; }
+      .card-status { grid-column: span 1; }
+      .card-skills { grid-column: span 1; }
       .links { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
@@ -246,40 +274,45 @@
 <body>
   <div class="grid">
 
-    <!-- Profile -->
     <div class="card card-profile">
-      <div class="profile-tag">Web Developer</div>
+      <div class="profile-tag">Full-Stack Engineer</div>
       <div class="name">김현섭</div>
       <div class="name-en">HyunSup Kim · @9oodEnough</div>
       <span class="badge">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-        Open to work
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        구매·SCM 풀스택 엔지니어
       </span>
     </div>
 
-    <!-- Avatar -->
     <div class="card card-avatar">
       <img class="avatar" src="https://avatars.githubusercontent.com/u/19829606?v=4" alt="김현섭" />
     </div>
 
-    <!-- Bio -->
-    <div class="card card-bio">
-      <div class="bio-text">
-        <strong>판교</strong>에서 일하는 웹 개발자.<br />
-        Web Developer based in <strong>Pangyo, Korea</strong>.
+    <div class="card card-job">
+      <div class="job-company">현재 직장</div>
+      <div class="job-title">글로벌 구매시스템 개발·운영</div>
+      <div class="job-sub">한국네트웍스 · 소프트웨어 엔지니어 · 경기도 성남</div>
+      <span class="job-since">2022.06 ~ 현재 · 4년 1개월</span>
+    </div>
+
+    <div class="card card-skills">
+      <div class="skills-label">Skills</div>
+      <div class="skill-tags">
+        <span class="skill-tag">웹개발</span>
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">SCM</span>
+        <span class="skill-tag">구매시스템</span>
       </div>
     </div>
 
-    <!-- Status -->
     <div class="card card-status">
       <div class="status-label">Location</div>
       <div class="status-value">
         <span class="dot"></span>
-        판교, Korea
+        성남, Korea
       </div>
     </div>
 
-    <!-- Links -->
     <div class="card card-links">
       <div class="links">
         <a class="link-item" href="https://github.com/9oodEnough" target="_blank" rel="noopener">
